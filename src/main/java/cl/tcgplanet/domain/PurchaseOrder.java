@@ -8,7 +8,7 @@ public class PurchaseOrder {
 	private String code;
 	private Date closeDate;
 	private Object status;
-	private Object client;
+	private Object customer;
 	public Integer getId() {
 		return id;
 	}
@@ -33,10 +33,10 @@ public class PurchaseOrder {
 	public void setStatus(Object status) {
 		this.status = status;
 	}
-	public Object getClient() {
-		return client;
+	public Object getCustomer() {
+		return customer;
 	}
-	public void setClient(Object client) {
-		this.client = client;
+	public void setCustomer(Object customer) {
+		this.customer = customer;
 	}
 }

@@ -1,6 +1,6 @@
 package cl.tcgplanet.domain;
 
-public class Client extends Person {
+public class Customer extends Person {
 
 	/**
 	 * 

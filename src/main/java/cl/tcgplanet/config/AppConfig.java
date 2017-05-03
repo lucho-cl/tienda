@@ -5,25 +5,27 @@ import javax.sql.DataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import cl.tcgplanet.service.ClientService;
-import cl.tcgplanet.service.ClientServiceImpl;
+import cl.tcgplanet.service.CustomerService;
+import cl.tcgplanet.service.CustomerServiceImpl;
 import cl.tcgplanet.service.HelloWorld;
 import cl.tcgplanet.service.HelloWorldImpl;
 
 @Configuration
 @MapperScan("cl.tcgplanet.persistence")
-public class ApplicationConfig {
+@ComponentScan(basePackages = "cl.tcgplanet.service")
+public class AppConfig {
 	@Bean(name = "hello")
 	public HelloWorld helloWorld() {
 		return new HelloWorldImpl();
 	}
-	@Bean(name = "client")
-	public ClientService clientBean() {
-		return new ClientServiceImpl();
-	}
+//	@Bean(name = "customer")
+//	public CustomerService customerBean() {
+//		return new CustomerServiceImpl();
+//	}
 
 	@Bean
 	public DataSource dataSource() {

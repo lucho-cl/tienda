@@ -1,0 +1,46 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.tcgplanet.persistence.CustomerMapper">
+    <cache />
+
+	<resultMap type="Customer" id="customerResult">
+		<association property="status" column="customer_status_id" javaType="CodeName" select="getStatus"></association>
+	</resultMap>
+
+    <select id="getCustomer" parameterType="Customer" resultMap="customerResult">
+        SELECT id, name, last_name as lastName, email, phone, birth_date as birthDate, user, pass, customer_status_id FROM customer
+        WHERE id = #{id}
+    </select>
+
+    <select id="getAllCustomers" resultMap="customerResult">
+        SELECT id, name, last_name as lastName, email, phone, birth_date as birthDate, user, pass, customer_status_id FROM customer
+    </select>
+
+    <select id="getStatus" resultType="CodeName">
+        SELECT id, name FROM customer_status
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertCustomer" parameterType="Customer">
+        INSERT INTO customer (name, last_name, email, phone, birth_date, user, pass, customer_status_id)
+        VALUES (#{name}, #{lastName}, #{email}, #{phone}, #{birthDate}, #{user}, #{pass}, #{status.code})
+    </insert>
+
+    <update id="updateCustomer" parameterType="Customer">
+        UPDATE customer SET
+            name = #{name},
+            lastName = #{lastName},
+            email = #{email},
+            phone = #{phone},
+            birth_date = #{birthDate},
+            user = #{user},
+            pass = #{pass},
+            customer_status_id = #{status.code}
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteCustomer" parameterType="Customer">
+        UPDATE customer SET
+            customer_status_id = #{status.code}
+        WHERE id = #{id}
+    </delete>
+</mapper>

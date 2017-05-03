@@ -5,22 +5,27 @@ import java.util.List;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import cl.tcgplanet.config.ApplicationConfig;
-import cl.tcgplanet.domain.Client;
-import cl.tcgplanet.service.ClientService;
+import cl.tcgplanet.config.AppConfig;
+import cl.tcgplanet.domain.Customer;
+import cl.tcgplanet.service.CustomerService;
 import cl.tcgplanet.service.HelloWorld;
 
 public class App {
 
 	public static void main(String args[]) {
-		AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		HelloWorld bean = (HelloWorld) context.getBean("hello");
 		bean.printMessage("Spring 4 - Hello World !!!!");
-		ClientService clientBean = (ClientService) context.getBean("client");
-		List<Client> clientes = clientBean.getAllClients();
-		for (Client client : clientes) {
-			System.out.println("Hola " + client.getName() + " " + client.getLastName() + " estado: " + client.getStatus().getName());
-		}
+		String[] lista = context.getBeanDefinitionNames();
+//		for (int i = 0; i < lista.length; i++) {
+//			System.out.println("valor de :" +lista[i]);
+//		}
+		CustomerService customerService = (CustomerService) context.getBean("customerServiceImpl");
+//		List<Customer> customeres = customerService.getAllCustomers();
+		System.out.println(customerService.getCustomer(new Customer()));
+//		for (Customer customer : customeres) {
+//			System.out.println("Hola " + customer.getName() + " " + customer.getLastName() + " estado: " + customer.getStatus().getName());
+//		}
 
 		context.close();
 	}
