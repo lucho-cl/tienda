@@ -1,0 +1,34 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.tcgplanet.persistence.PurchaseOrderDetailMapper">
+    <cache />
+
+    <select id="getPurchaseOrderDetail" parameterType="PurchaseOrderDetail" resultType="PurchaseOrderDetail">
+        SELECT id, firstName, lastName, email FROM product
+        WHERE ID = #{id}
+    </select>
+
+    <select id="getAllPurchaseOrderDetails" resultType="PurchaseOrderDetail">
+        SELECT id, firstName, lastName, email FROM product
+    </select>
+
+    <insert id="insertPurchaseOrderDetail" parameterType="PurchaseOrderDetail">
+        INSERT INTO product (firstName, lastName, email)
+        VALUES (#{firstName}, #{lastName}, #{email})
+    </insert>
+
+    <update id="updatePurchaseOrderDetail" parameterType="PurchaseOrderDetail">
+        UPDATE product SET
+            firstName = #{firstName},
+            lastName = #{lastName},
+            email = #{email}
+        WHERE ID = #{id}
+    </update>
+    
+    <delete id="deletePurchaseOrderDetail" parameterType="PurchaseOrderDetail">
+        UPDATE product SET
+            firstName = #{firstName},
+            lastName = #{lastName},
+            email = #{email}
+        WHERE ID = #{id}
+    </delete>
+</mapper>
