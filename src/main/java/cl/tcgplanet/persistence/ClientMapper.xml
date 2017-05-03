@@ -2,33 +2,45 @@
 <mapper namespace="cl.tcgplanet.persistence.ClientMapper">
     <cache />
 
-    <select id="getClient" parameterType="Client" resultType="Client">
-        SELECT id, name, last_name as lastName, email, phone, birth_date, user, pass FROM client
-        WHERE ID = #{id}
+	<resultMap type="Client" id="clientResult">
+		<association property="status" column="client_status_id" javaType="CodeName" select="getStatus"></association>
+	</resultMap>
+
+    <select id="getClient" parameterType="Client" resultMap="clientResult">
+        SELECT id, name, last_name as lastName, email, phone, birth_date as birthDate, user, pass, client_status_id FROM client
+        WHERE id = #{id}
     </select>
 
-    <select id="getAllClients" resultType="Client">
-        SELECT id, name, last_name as lastName, email, phone, birth_date, user, pass FROM client
+    <select id="getAllClients" resultMap="clientResult">
+        SELECT id, name, last_name as lastName, email, phone, birth_date as birthDate, user, pass, client_status_id FROM client
+    </select>
+
+    <select id="getStatus" resultType="CodeName">
+        SELECT id, name FROM client_status
+        WHERE id = #{id}
     </select>
 
     <insert id="insertClient" parameterType="Client">
-        INSERT INTO product (firstName, lastName, email)
-        VALUES (#{firstName}, #{lastName}, #{email})
+        INSERT INTO client (name, last_name, email, phone, birth_date, user, pass, client_status_id)
+        VALUES (#{name}, #{lastName}, #{email}, #{phone}, #{birthDate}, #{user}, #{pass}, #{status.code})
     </insert>
 
     <update id="updateClient" parameterType="Client">
-        UPDATE product SET
-            firstName = #{firstName},
+        UPDATE client SET
+            name = #{name},
             lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
+            email = #{email},
+            phone = #{phone},
+            birth_date = #{birthDate},
+            user = #{user},
+            pass = #{pass},
+            client_status_id = #{status.code}
+        WHERE id = #{id}
     </update>
     
     <delete id="deleteClient" parameterType="Client">
-        UPDATE product SET
-            firstName = #{firstName},
-            lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
+        UPDATE client SET
+            client_status_id = #{status.code}
+        WHERE id = #{id}
     </delete>
 </mapper>

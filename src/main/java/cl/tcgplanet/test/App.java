@@ -19,7 +19,7 @@ public class App {
 		ClientService clientBean = (ClientService) context.getBean("client");
 		List<Client> clientes = clientBean.getAllClients();
 		for (Client client : clientes) {
-			System.out.println("Hola " + client.getName() + " " + client.getLastName());
+			System.out.println("Hola " + client.getName() + " " + client.getLastName() + " estado: " + client.getStatus().getName());
 		}
 
 		context.close();

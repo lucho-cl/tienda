@@ -16,6 +16,7 @@ public class Person extends BaseModel{
 	private Date birthDate;
 	private String user;
 	private String pass;
+	private CodeName status;
 	public Integer getId() {
 		return id;
 	}
@@ -63,6 +64,14 @@ public class Person extends BaseModel{
 	}
 	public void setPass(String pass) {
 		this.pass = pass;
+	}
+	public CodeName getStatus() {
+		if(null==status)
+			setStatus(new CodeName());
+		return status;
+	}
+	public void setStatus(CodeName status) {
+		this.status = status;
 	}
 
 }
