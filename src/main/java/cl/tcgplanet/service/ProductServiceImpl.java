@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import cl.tcgplanet.domain.Product;
 import cl.tcgplanet.persistence.ProductMapper;
 
-@Service
+@Service("productService")
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired

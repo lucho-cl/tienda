@@ -21,8 +21,8 @@ public class App {
 		for (int i = 0; i < lista.length; i++) {
 			System.out.println("valor de :" +lista[i]);
 		}
-		CustomerService customerService = (CustomerService) context.getBean("customerServiceImpl");
-		ProductService productService = (ProductService) context.getBean("productServiceImpl");
+		CustomerService customerService = (CustomerService) context.getBean("customerService");
+		ProductService productService = (ProductService) context.getBean("productService");
 		List<Customer> customers = customerService.getAllCustomers();
 		System.out.println(productService.getAllProducts());
 //		System.out.println(customerService.getCustomer(new Customer()));

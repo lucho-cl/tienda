@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import cl.tcgplanet.domain.Customer;
 import cl.tcgplanet.persistence.CustomerMapper;
 
-@Service
+@Service("customerService")
 public class CustomerServiceImpl implements CustomerService{
 	
 	@Autowired
