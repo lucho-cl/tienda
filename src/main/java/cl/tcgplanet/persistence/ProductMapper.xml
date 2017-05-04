@@ -3,7 +3,7 @@
     <cache />
 
     <select id="getAllProducts" resultType="Product">
-        SELECT id, firstName, lastName, email FROM product
+        SELECT * FROM product
     </select>
 
     <insert id="insertProduct" parameterType="Product">

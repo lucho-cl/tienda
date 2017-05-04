@@ -9,8 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import cl.tcgplanet.service.CustomerService;
-import cl.tcgplanet.service.CustomerServiceImpl;
 import cl.tcgplanet.service.HelloWorld;
 import cl.tcgplanet.service.HelloWorldImpl;
 

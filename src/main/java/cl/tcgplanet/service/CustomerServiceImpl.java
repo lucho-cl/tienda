@@ -9,35 +9,28 @@ import cl.tcgplanet.domain.Customer;
 import cl.tcgplanet.persistence.CustomerMapper;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
-
-	@Autowired
-	private	CustomerMapper customerMapper;
+public class CustomerServiceImpl implements CustomerService{
 	
-	public Customer getCustomer(Customer customer) {
-		return getCustomerMapper().getCustomer(customer);
-	}
+	@Autowired
+	CustomerMapper customerMapper;
+	
+    public Customer getCustomer(Customer customer){
+    	return customerMapper.getCustomer(customer);
+    }
+    
+    public List<Customer> getAllCustomers(){
+    	return customerMapper.getAllCustomers();
+    }
 
-	public List<Customer> getAllCustomers() {
-		return getCustomerMapper().getAllCustomers();
-	}
+    public void insertCustomer(Customer customer){
+    	customerMapper.insertCustomer(customer);
+    }
 
-	public void insertCustomer(Customer customer) {
-		getCustomerMapper().insertCustomer(customer);
-	}
-
-	public void updateCustomer(Customer customer) {
-		getCustomerMapper().updateCustomer(customer);
-	}
-
-	public void deleteCustomer(Customer customer) {
-		getCustomerMapper().deleteCustomer(customer);
-	}
-
-	public CustomerMapper getCustomerMapper() {
-		return customerMapper;
-	}
-	public void setCustomerMapper(CustomerMapper customerMapper) {
-		this.customerMapper = customerMapper;
-	}
+    public void updateCustomer(Customer customer){
+    	customerMapper.updateCustomer(customer);
+    }
+    
+    public void deleteCustomer(Customer customer){
+    	customerMapper.deleteCustomer(customer);
+    }
 }

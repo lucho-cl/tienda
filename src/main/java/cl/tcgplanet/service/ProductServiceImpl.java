@@ -3,10 +3,12 @@ package cl.tcgplanet.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import cl.tcgplanet.domain.Product;
 import cl.tcgplanet.persistence.ProductMapper;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
