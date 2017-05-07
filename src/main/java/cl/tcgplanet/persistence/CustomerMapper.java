@@ -15,4 +15,6 @@ public interface CustomerMapper {
     public void updateCustomer(Customer customer);
     
     public void deleteCustomer(Customer customer);
+
+	public List<Customer> getCustomers(Customer customer);
 }

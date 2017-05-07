@@ -21,6 +21,10 @@ public class CustomerServiceImpl implements CustomerService{
     public List<Customer> getAllCustomers(){
     	return customerMapper.getAllCustomers();
     }
+    
+    public List<Customer> getCustomers(Customer customer) {
+    	return customerMapper.getCustomers(customer);
+    }
 
     public void insertCustomer(Customer customer){
     	customerMapper.insertCustomer(customer);

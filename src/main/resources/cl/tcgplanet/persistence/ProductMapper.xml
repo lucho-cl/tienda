@@ -1,26 +1,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cl.tcgplanet.persistence.ProductMapper">
-    <cache />
 
-    <select id="getAllProducts" resultType="Product">
-        SELECT * FROM product
-    </select>
+	<select id="getAllProducts" resultType="Product">
+		SELECT *
+		FROM product
+	</select>
 
-    <insert id="insertProduct" parameterType="Product">
-        INSERT INTO product (firstName, lastName, email)
-        VALUES (#{firstName}, #{lastName}, #{email})
-    </insert>
+	<select id="getProduct" parameterType="Product" resultType="Product">
+		SELECT *
+		FROM product
+		WHERE sku = #{sku}
+	</select>
 
-    <update id="updateProduct" parameterType="Product">
-        UPDATE product SET
-            firstName = #{firstName},
-            lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
-    </update>
-    
-    <delete id="deleteProduct" parameterType="Product">
-    	DELETE FROM product
-    	WHERE id = #{id}
-    </delete>
+	<insert id="insertProduct" parameterType="Product">
+		INSERT INTO product
+		(sku,
+		name,
+		description,
+		mrp,
+		trade_price,
+		price,
+		status,
+		release_date,
+		range,
+		ss_code,
+		provider,
+		tag,
+		system,
+		race,
+		type,
+		barcode,
+		commodity_code,
+		country_origin,
+		weight,
+		cube,
+		order_weight,
+		order_cube)
+		VALUES
+		(#{sku},
+		#{name},
+		#{description},
+		#{mrp},
+		#{tradePrice},
+		#{price},
+		#{status},
+		#{releaseDate},
+		#{range},
+		#{ssCode},
+		#{provider},
+		#{tag},
+		#{system},
+		#{race},
+		#{type},
+		#{barcode},
+		#{commodityCode},
+		#{countryOrigin},
+		#{weight},
+		#{cube},
+		#{orderWeight},
+		#{orderCube});
+	</insert>
+
+	<update id="updateProduct" parameterType="Product">
+		UPDATE product
+		<set>
+			name = #{name},
+			description = #{description},
+			mrp = #{mrp},
+			trade_price = #{tradePrice},
+			price = #{price},
+			status = #{status},
+			release_date = #{releaseDate},
+			range = #{range},
+			ss_code = #{ssCode},
+			provider = #{provider},
+			tag = #{tag},
+			system = #{system},
+			race =
+			#{race},
+			type = #{type},
+			barcode = #{barcode},
+			commodity_code =
+			#{commodityCode},
+			country_origin = #{countryOrigin},
+			weight =
+			#{weight},
+			cube = #{cube},
+			order_weight = #{orderWeight},
+			order_cube =
+			#{orderCube}
+		</set>
+		WHERE sku = #{sku}
+
+	</update>
+
+	<delete id="deleteProduct" parameterType="Product">
+		DELETE FROM product
+		WHERE sku = #{sku}
+	</delete>
 </mapper>

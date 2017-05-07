@@ -1,34 +1,163 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cl.tcgplanet.persistence.PurchaseOrderMapper">
-    <cache />
+	<resultMap type="PurchaseOrder" id="purchaseOrderResult">
+		<association property="status" column="po_status_id"
+			javaType="CodeName" select="getStatus"></association>
+		<association property="customer" column="customer_id"
+			javaType="Customer" select="getCustomer"></association>
+	</resultMap>
 
-    <select id="getPurchaseOrder" parameterType="PurchaseOrder" resultType="PurchaseOrder">
-        SELECT id, firstName, lastName, email FROM product
-        WHERE ID = #{id}
-    </select>
+	<select id="getPurchaseOrder" parameterType="PurchaseOrder"
+		resultMap="purchaseOrderResult">
+		SELECT
+		code,
+		close_date AS closeDate,
+		po_status_id,
+		customer_id,
+		city,
+		comment,
+		price,
+		paid
+		FROM
+		purchace_order
+		LEFT JOIN (SELECT
+		po_code,
+		sum(price) AS price
+		FROM po_detail
+		group by po_code) price ON
+		price.po_code=code
+		LEFT JOIN
+		(SELECT
+		po_code, SUM(amount) AS paid
+		FROM
+		po_payment
+		GROUP BY po_code) paid ON paid.po_code = code
+		WHERE code =
+		#{code}
+	</select>
 
-    <select id="getAllPurchaseOrders" resultType="PurchaseOrder">
-        SELECT id, firstName, lastName, email FROM product
-    </select>
+	<select id="getAllPurchaseOrders" resultMap="purchaseOrderResult">
+		SELECT
+		code,
+		close_date AS closeDate,
+		po_status_id,
+		customer_id,
+		city,
+		comment,
+		price,
+		paid
+		FROM
+		purchace_order
+		LEFT JOIN (SELECT po_code,
+		sum(price) AS price
+		FROM
+		po_detail
+		group by po_code) price ON price.po_code=code
+		LEFT JOIN
+		(SELECT
+		po_code, SUM(amount) AS paid
+		FROM
+		po_payment
+		GROUP BY po_code)
+		paid ON paid.po_code = code
+	</select>
 
-    <insert id="insertPurchaseOrder" parameterType="PurchaseOrder">
-        INSERT INTO product (firstName, lastName, email)
-        VALUES (#{firstName}, #{lastName}, #{email})
-    </insert>
+	<select id="getPurchaseOrders" parameterType="PurchaseOrder"
+		resultMap="purchaseOrderResult">
+		SELECT
+		code,
+		close_date AS closeDate,
+		po_status_id,
+		customer_id,
+		city,
+		comment,
+		price,
+		paid
+		FROM
+		purchace_order
+		LEFT JOIN (SELECT po_code,
+		sum(price) AS
+		price
+		FROM po_detail
+		group by po_code) price ON
+		price.po_code=code
+		LEFT JOIN
+		(SELECT
+		po_code, SUM(amount) AS paid
+		FROM
+		po_payment
+		GROUP BY po_code) paid ON paid.po_code = code
+		<where>
+			<if test="code != null">
+				code = #{code}
+			</if>
+			<if test="closeDate != null">
+				AND close_date = #{closeDate}
+			</if>
+			<if test="status.label != null">
+				AND po_status_id = #{status.label}
+			</if>
+			<if test="customer != null">
+				AND customer_id = #{customer.id}
+			</if>
+			<if test="city != null">
+				AND city = #{city}
+			</if>
+		</where>
+	</select>
 
-    <update id="updatePurchaseOrder" parameterType="PurchaseOrder">
-        UPDATE product SET
-            firstName = #{firstName},
-            lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
-    </update>
-    
-    <delete id="deletePurchaseOrder" parameterType="PurchaseOrder">
-        UPDATE product SET
-            firstName = #{firstName},
-            lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
-    </delete>
+	<select id="getStatus" resultType="CodeName">
+		SELECT id AS label, name AS
+		value FROM
+		po_status
+		WHERE id = #{id}
+	</select>
+
+	<select id="getCustomer" parameterType="Customer" resultType="Customer">
+		SELECT id, name, last_name as lastName, email, phone, birth_date as
+		birthDate, user, pass, customer_status_id FROM customer
+		WHERE id =
+		#{id}
+	</select>
+	<insert id="insertPurchaseOrder" parameterType="PurchaseOrder">
+		INSERT INTO
+		purchace_order
+		(code,
+		created_date,
+		close_date,
+		po_status_id,
+		customer_id,
+		city,
+		comment)
+		VALUES
+		(#{code}, #{createdDate}, #{closeDate},
+		#{status.label},#{customer.id},#{city},#{comment})
+	</insert>
+
+	<update id="updatePurchaseOrder" parameterType="PurchaseOrder">
+		UPDATE purchace_order
+		<set>
+			<if test="createdDate != null">created_date = #{createdDate},</if>
+			<if test="closeDate != null">close_date = #{closeDate},</if>
+			<if test="status.label != null">po_status_id = #{status.label},</if>
+			<if test="customer != null">customer_id = #{customer.id},</if>
+			<if test="city != null">city = #{city}</if>
+			<if test="comment != null">comment = #{comment}</if>
+		</set>
+		WHERE code = #{code}
+	</update>
+
+	<update id="deletePurchaseOrder" parameterType="PurchaseOrder">
+		UPDATE
+		purchace_order
+		set po_status_id = #{status.label}
+		WHERE code = #{code}
+	</update>
+
+	<select id="getNextOrderCode" resultType="String">
+		<bind name="codePattern" value="_parameter + '%'" />
+		SELECT (count(code)+1) as nextCode FROM purchace_order
+		WHERE code LIKE
+		#{codePattern}
+	</select>
 </mapper>

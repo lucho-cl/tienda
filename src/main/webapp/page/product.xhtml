@@ -7,20 +7,20 @@ xmlns:p="http://primefaces.org/ui">
  
     <h:head></h:head>
     <body>
-        <h1>Spring with Primefaces with MyBatiss</h1>
+        <h1>Mantenerdor Productos</h1>
         
-        <p:dataTable var="customer" value="#{customerBean.customers}" widgetVar="customerTable" emptyMessage="No customers found">
+        <p:dataTable var="product" value="#{productBean.products}" widgetVar="productTable" emptyMessage="No products found">
              <p:column headerText="Id">
-                 <h:outputText value="#{customer.id}"/>
+                 <h:outputText value="#{product.id}"/>
              </p:column>
             <p:column headerText="First Name">
-                <h:outputText value="#{customer.name}"/>
+                <h:outputText value="#{product.name}"/>
             </p:column>
             <p:column headerText="Last Name">
-                <h:outputText value="#{customer.lastName}"/>
+                <h:outputText value="#{product.description}"/>
             </p:column>
-            <p:column headerText="Birthdate">
-                <h:outputText value="#{customer.birthDate}"/>
+            <p:column headerText="Price">
+                <h:outputText value="#{product.price}"/>
             </p:column>
         </p:dataTable>
     </body>

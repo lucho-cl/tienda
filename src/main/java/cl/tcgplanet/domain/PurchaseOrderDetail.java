@@ -1,6 +1,10 @@
 package cl.tcgplanet.domain;
 
-public class PurchaseOrderDetail {
+public class PurchaseOrderDetail extends BaseModel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1750672789618418337L;
 	private PurchaseOrder po;
 	private Product product;
 	private Integer quantity;

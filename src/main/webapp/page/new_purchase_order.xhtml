@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/page/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:panel id="datosOrden" header="New Order Data" toggleable="true"
+				toggleSpeed="500" widgetVar="wdgDatosOrden">
+
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<p:outputLabel for="poDate" value="Fecha" />
+						</p:column>
+						<p:column colspan="2">
+							<p:calendar id="poDate"
+								value="#{purchaseOrderBean.newOrder.closeDate}"
+								pattern="dd-MM-yyyy" mask="true" required="true"
+								readonlyInput="true" requiredMessage="Pick a date"
+								converter="localDateConverter" />
+						</p:column>
+						<p:column>
+							<p:outputLabel for="poCity" value="Ciudad" />
+						</p:column>
+						<p:column colspan="2">
+
+							<p:selectOneMenu id="poCity"
+								value="#{purchaseOrderBean.newOrder.city}" required="true"
+								requiredMessage="Select a city">
+								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItem itemLabel="Santiago" itemValue="SCL" />
+								<f:selectItem itemLabel="Iquique" itemValue="IQQ" />
+								<f:selectItem itemLabel="Arica" itemValue="ARI" />
+								<f:selectItem itemLabel="Bolivia" itemValue="BOL" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel value="Correo cliente" for="clientEmail" />
+						</p:column>
+						<p:column colspan="2">
+							<p:autoComplete id="clientEmail" forceSelection="true"
+								widgetVar="wdgClientEmail"
+								value="#{purchaseOrderBean.newOrder.customer}" var="customer"
+								itemLabel="#{customer.email}" itemValue="#{customer}"
+								completeMethod="#{customerBean.completeByEmail}"
+								converter="entityConverter" required="true"
+								requiredMessage="Ingrese un cliente activo">
+								<p:ajax event="itemSelect"
+									listener="#{purchaseOrderBean.onItemSelect}"
+									update="clientName" />
+							</p:autoComplete>
+						</p:column>
+						<p:column>
+							<p:outputLabel for="clientName" value="Nombre cliente" />
+						</p:column>
+						<p:column colspan="2">
+							<p:inputText
+								value="#{purchaseOrderBean.newOrder.customer.name} #{purchaseOrderBean.newOrder.customer.lastName}"
+								id="clientName" maxlength="50" size="40" disabled="true" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+			</p:panel>
+			<p:panel id="productsOrder" header="Products" toggleable="true"
+				toggleSpeed="500" widgetVar="wdgProductosOrden">
+
+				<p:commandButton icon="ui-icon-search" value="Add Products"
+					action="#{purchaseOrderBean.getAllProducts}" immediate="true"
+					update=":form:products" oncomplete="PF('productsDlg').show()" />
+
+				<p:dataTable id="details" var="detail"
+					value="#{purchaseOrderBean.orderDetails}"
+					emptyMessage="No products selected">
+					<p:column headerText="Code">
+						<h:outputText value="#{detail.product.sku}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputText value="#{detail.product.name}" />
+					</p:column>
+					<p:column headerText="Price">
+						<h:outputText value="#{detail.product.price}" />
+					</p:column>
+					<p:column headerText="Qty">
+						<p:inputText value="#{detail.quantity}">
+							<p:keyFilter regEx="/[\d]/"></p:keyFilter>
+							<f:attribute name="det" value="#{detail}" />
+							<p:ajax event="keyup"
+								listener="#{purchaseOrderBean.calculatePartialTotal}"
+								update="details"></p:ajax>
+						</p:inputText>
+					</p:column>
+					<p:column headerText="Total">
+						<p:inputNumber value="#{detail.price}" disabled="true" />
+					</p:column>
+					<p:column headerText="Delete">
+						<p:commandButton update="details"
+							action="#{purchaseOrderBean.removeProduct(detail)}"
+							icon="ui-icon-cancel" />
+					</p:column>
+					<p:columnGroup type="footer">
+						<p:row>
+							<p:column colspan="4" style="text-align:right"
+								footerText="Total:" />
+							<p:column colspan="2"
+								footerText="#{purchaseOrderBean.orderTotal}" />
+						</p:row>
+					</p:columnGroup>
+				</p:dataTable>
+
+			</p:panel>
+
+			<p:commandButton value="Save" id="save" update="growl"
+				actionListener="#{purchaseOrderBean.createOrder}"
+				styleClass="ui-priority-primary" />
+			<p:commandButton icon="ui-icon-arrow-1-w" value="Back"
+				action="/page/purchase_order" immediate="true" />
+
+			<p:dialog header="Products" resizable="false" showEffect="fade"
+				widgetVar="productsDlg">
+				<p:dataTable id="products" var="product"
+					value="#{purchaseOrderBean.products}"
+					selection="#{purchaseOrderBean.selectedProducts}"
+					rowKey="#{product.sku}" emptyMessage="No products found">
+					<f:facet name="header">
+			            Products
+			        </f:facet>
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+					<p:column headerText="Code">
+						<h:outputText value="#{product.sku}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputText value="#{product.name}" />
+					</p:column>
+					<p:column headerText="Price">
+						<h:outputText value="#{product.price}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton update=":form:productsOrder"
+							action="#{purchaseOrderBean.addProducts}" icon="ui-icon-check"
+							value="Add" oncomplete="PF('productsDlg').hide()" />
+					</f:facet>
+				</p:dataTable>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

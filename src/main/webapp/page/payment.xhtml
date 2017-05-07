@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/page/template/main.xhtml">
+
+	<ui:define name="body">
+		<!--     <f:metadata> -->
+		<!--     <f:viewParam name="orderCode" value="#{paymentBean.orderCode}"  -->
+		<!--         converter="#{entityConverter}" converterMessage="Unknown product, please use a link from within the system." -->
+		<!--         required="true" requiredMessage="Bad request, please use a link from within the system." -->
+		<!--     /> -->
+		<!-- </f:metadata> -->
+		<h:form id="form" rendered="#{null != paymentBean.purchaseOrder}">
+
+			<h:panelGrid id="newPayment" columns="4" cellpadding="5">
+				<p:outputLabel for="orderCode" value="Order" />
+				<p:inputText id="orderCode"
+					value="#{paymentBean.purchaseOrder.code}" disabled="true" />
+
+				<p:outputLabel for="customer" value="Customer" />
+				<p:inputText id="customer"
+					value="#{paymentBean.purchaseOrder.customer.name} #{paymentBean.purchaseOrder.customer.lastName}"
+					disabled="true" />
+
+				<p:outputLabel for="comment" value="Comment" />
+				<p:column colspan="3">
+					<p:inputText id="comment"
+						value="#{paymentBean.purchaseOrder.comment}" disabled="true" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton icon="ui-icon-search" value="Add Payment"
+						actionListener="#{paymentBean.addPayment}"
+						update=":newPaymentForm:newPayment"
+						oncomplete="PF('newPaymentDlg').show()" />
+					<p:commandButton icon="ui-icon-arrow-1-w" value="Back"
+						action="/page/purchase_order" />
+				</f:facet>
+			</h:panelGrid>
+
+			<p:dataTable id="payments" var="payment"
+				value="#{paymentBean.payments}" emptyMessage="No payments found"
+				selectionMode="single" selection="#{paymentBean.payment}"
+				rowKey="#{payment.id}">
+				<p:ajax event="rowSelect" update=":detailPaymentForm:detailPayment"
+					oncomplete="PF('detailPaymentDlg').show()" listener="#{paymentBean.onRowSelect}" />
+				<p:column headerText="Payer">
+					<h:outputText value="#{payment.payer}" />
+				</p:column>
+				<p:column headerText="Date">
+					<h:outputText value="#{payment.date}" />
+				</p:column>
+				<p:column headerText="Amount">
+					<h:outputText value="#{payment.amount}">
+						<f:convertNumber type="currency" currencySymbol="$" locale="es_CL" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Type">
+					<h:outputText value="#{payment.type}" />
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+
+		<p:dialog header="New Payment" resizable="false" showEffect="fade"
+			widgetVar="newPaymentDlg">
+			<h:form id="newPaymentForm">
+				<h:panelGrid id="newPayment" columns="2" cellpadding="5">
+					<p:outputLabel for="npPayer" value="Payer" />
+					<p:inputText id="npPayer" value="#{paymentBean.newPayment.payer}"
+						required="true" requiredMessage="Payer missing" />
+
+					<p:outputLabel for="npDate" value="Date" />
+					<p:calendar id="npDate" value="#{paymentBean.newPayment.date}"
+						pattern="dd-MM-yyyy" mask="true" required="true"
+						readonlyInput="true" requiredMessage="Pick a date"
+						converter="localDateConverter" />
+
+					<p:outputLabel for="npAmount" value="Amount" />
+					<p:inputText id="npAmount" value="#{paymentBean.newPayment.amount}"
+						required="true" requiredMessage="Amount missing" />
+
+					<p:outputLabel for="npType" value="Type" />
+					<p:inputText id="npType" value="#{paymentBean.newPayment.type}"
+						required="true" requiredMessage="Type missing" />
+					<f:facet name="footer">
+						<p:commandButton value="Save" update=":form:payments, :growl"
+							action="#{paymentBean.createPayment}"
+							oncomplete="PF('newPaymentDlg').hide()" />
+						<p:commandButton type="reset" value="Reset" />
+						<p:commandButton value="Close" immediate="true"
+							oncomplete="PF('newPaymentDlg').hide()" />
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Payment" resizable="false" showEffect="fade"
+			widgetVar="detailPaymentDlg">
+			<h:form id="detailPaymentForm">
+				<h:panelGrid id="detailPayment" columns="2" cellpadding="5">
+					<p:outputLabel for="dpPayer" value="Payer" />
+					<p:inputText id="dpPayer" value="#{paymentBean.payment.payer}"
+						required="true" requiredMessage="Payer missing" />
+
+					<p:outputLabel for="dpDate" value="Date" />
+					<p:calendar id="dpDate" value="#{paymentBean.payment.date}"
+						pattern="dd-MM-yyyy" required="true"
+						requiredMessage="Pick a date"
+						converter="localDateConverter" />
+
+					<p:outputLabel for="dpAmount" value="Amount" />
+					<p:inputText id="dpAmount" value="#{paymentBean.payment.amount}"
+						required="true" requiredMessage="Amount missing" />
+
+					<p:outputLabel for="dpType" value="Type" />
+					<p:inputText id="dpType" value="#{paymentBean.payment.type}"
+						required="true" requiredMessage="Type missing" />
+					<f:facet name="footer">
+						<p:commandButton value="Save" update=":form:payments, :growl"
+							action="#{paymentBean.modifyPayment}"
+							oncomplete="PF('detailPaymentDlg').hide()" />
+						<p:commandButton value="Close" immediate="true"
+							oncomplete="PF('detailPaymentDlg').hide()" />
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

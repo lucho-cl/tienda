@@ -10,9 +10,13 @@ public interface PurchaseOrderMapper {
     
     public List<PurchaseOrder> getAllPurchaseOrders();
 
+    public List<PurchaseOrder> getPurchaseOrders(PurchaseOrder po);
+
     public void insertPurchaseOrder(PurchaseOrder po);
 
     public void updatePurchaseOrder(PurchaseOrder po);
     
     public void deletePurchaseOrder(PurchaseOrder po);
+
+	public String getNextOrderCode(String code);
 }

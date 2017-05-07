@@ -1,0 +1,92 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.tcgplanet.persistence.PaymentMapper">
+	<resultMap type="Payment" id="paymentResult">
+		<association property="po" column="po_code" javaType="PurchaseOrder"
+			select="getPurchaseOrder" />
+	</resultMap>
+	<select id="getAllPayments" resultMap="paymentResult">
+		SELECT id,
+		po_code,
+		amount,
+		type,
+		date,
+		payer
+		FROM po_payment
+	</select>
+
+	<select id="getPayments" parameterType="Payment" resultMap="paymentResult">
+		SELECT id,
+		po_code,
+		amount,
+		type,
+		date,
+		payer
+		FROM
+		po_payment
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="po.code != null">
+				AND po_code = #{po.code}
+			</if>
+			<if test="amount != null">
+				AND amount = #{amount}
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+			<if test="date != null">
+				AND date = #{date}
+			</if>
+			<if test="payer != null">
+				AND payer = #{payer}
+			</if>
+		</where>
+	</select>
+
+	<select id="getPurchaseOrder" resultType="PurchaseOrder">
+		SELECT
+		code,
+		close_date AS closeDate,
+		po_status_id,
+		customer_id,
+		city,
+		comment
+		FROM
+		purchace_order
+		WHERE code = #{po_code}
+	</select>
+	
+	<insert id="insertPayment" parameterType="Payment">
+		INSERT INTO po_payment
+		(po_code,
+		amount,
+		type,
+		date,
+		payer)
+		VALUES
+		(#{po.code},
+		#{amount},
+		#{type},
+		#{date},
+		#{payer})
+	</insert>
+
+	<update id="updatePayment" parameterType="Payment">
+		UPDATE po_payment
+		<set>
+			<if test="po.code != null">po_code = #{po.code},</if>
+			<if test="amount != null">amount = #{amount},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="date != null">date = #{date},</if>
+			<if test="payer != null">payer = #{payer}</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+	<update id="deletePayment" parameterType="Payment">
+		DELETE FROM payment
+		WHERE id = #{id}
+	</update>
+</mapper>

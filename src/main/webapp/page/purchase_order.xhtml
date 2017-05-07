@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/page/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<h1>Purchase orders</h1>
+
+			<p:dataTable id="orders" var="order" value="#{purchaseOrderBean.orders}"
+				widgetVar="orderTable" emptyMessage="No orders found">
+				<p:column headerText="Code">
+					<h:outputText value="#{order.code}" />
+				</p:column>
+				<p:column headerText="From">
+					<h:outputText value="#{order.city}" />
+				</p:column>
+				<p:column headerText="Customer">
+					<h:outputText
+						value="#{order.customer.name} #{order.customer.lastName}" />
+				</p:column>
+				<p:column headerText="Status">
+					<h:outputText value="#{order.status.value}" />
+				</p:column>
+				<p:column headerText="Date">
+					<h:outputText value="#{order.closeDate}" />
+				</p:column>
+				<p:column headerText="Price">
+					<h:outputText value="#{order.price}">
+						<f:convertNumber type="currency" currencySymbol="$" locale="es_CL" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Paid">
+					<h:outputText value="#{order.paid}">
+						<f:convertNumber type="currency" currencySymbol="$" locale="es_CL" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Actions">
+					<p:commandButton action="/page/payment" value="$" title="Payments">
+						<f:param name="orderCode" value="#{order.code}" />
+						<!-- 						<f:param name="purchaseOrder" value="#{order}" /> -->
+					</p:commandButton>
+					<!--         <h:link value="$" outcome="/page/payment"> -->
+					<!-- 						<f:param name="orderCode" value="#{order.code}" /> -->
+					<!-- 						</h:link> -->
+					<p:commandButton action="#{purchaseOrderBean.marcarAbonado(order)}"
+						value="Go" title="Marcar como abonado"
+						rendered="#{order.paid ge (order.price/2) and order.status.label eq '1'}"
+						update=":form:orders" >
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:commandButton action="/page/new_purchase_order" value="New order"
+				title="Creates a new order">
+			</p:commandButton>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

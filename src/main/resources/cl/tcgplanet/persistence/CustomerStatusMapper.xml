@@ -1,0 +1,9 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.tcgplanet.persistence.CustomerStatusMapper">
+
+	<select id="getAllStatus" resultType="CodeName">
+		SELECT id AS label, name AS
+		value FROM
+		customer_status
+	</select>
+</mapper>

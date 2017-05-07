@@ -10,8 +10,10 @@ public interface PurchaseOrderDetailMapper {
     
     public List<PurchaseOrderDetail> getAllPurchaseOrderDetails();
 
-    public void insertPurchaseOrderDetail(PurchaseOrderDetail pod);
+    public List<PurchaseOrderDetail> getPurchaseOrderDetails(PurchaseOrderDetail purchaseOrderDetail);
 
+    public void insertPurchaseOrderDetail(PurchaseOrderDetail pod);
+    
     public void updatePurchaseOrderDetail(PurchaseOrderDetail pod);
     
     public void deletePurchaseOrderDetail(PurchaseOrderDetail pod);

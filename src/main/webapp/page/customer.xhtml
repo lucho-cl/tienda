@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/page/template/main.xhtml">
+
+	<ui:define name="body">
+		<h1>Clients</h1>
+
+		<h:form id="form">
+			<p:dataTable id="customers" var="customer" value="#{customerBean.customers}"
+				widgetVar="customerTable" emptyMessage="No customers found">
+				<p:column headerText="Id" rendered="false">
+					<h:outputText value="#{customer.id}" />
+				</p:column>
+				<p:column headerText="First Name">
+					<h:outputText value="#{customer.name}" />
+				</p:column>
+				<p:column headerText="Last Name">
+					<h:outputText value="#{customer.lastName}" />
+				</p:column>
+				<p:column headerText="Email">
+					<h:outputText value="#{customer.email}" />
+				</p:column>
+				<p:column headerText="Phone" rendered="false">
+					<h:outputText value="#{customer.phone}" />
+				</p:column>
+				<p:column headerText="Birthdate" rendered="false">
+					<h:outputText value="#{customer.birthDate}" />
+				</p:column>
+				<p:column headerText="User" rendered="false">
+					<h:outputText value="#{customer.user}" />
+				</p:column>
+				<p:column headerText="Pass" rendered="false">
+					<h:outputText value="#{customer.pass}" />
+				</p:column>
+				<p:column headerText="Status" rendered="true">
+					<h:outputText value="#{customer.status.value}" />
+				</p:column>
+				<p:column headerText="Registered" rendered="false">
+					<h:outputText value="#{customer.registered}" />
+				</p:column>
+			</p:dataTable>
+			<p:commandButton value="Add customer"
+				actionListener="#{paymentBean.addCustomer}"
+				update=":newCustomerForm:newCustomer"
+				oncomplete="PF('newCustomerDlg').show()" />
+		</h:form>
+
+		<p:dialog header="New Customer" resizable="false" showEffect="fade"
+			widgetVar="newCustomerDlg">
+			<h:form id="newCustomerForm">
+				<h:panelGrid id="newCustomer" columns="2" cellpadding="5">
+					<p:outputLabel for="ncName" value="Name" />
+					<p:inputText id="ncName" value="#{customerBean.newCustomer.name}"
+						required="true" requiredMessage="Name missing" />
+					<p:outputLabel for="ncLastName" value="Last Name" />
+					<p:inputText id="ncLastName"
+						value="#{customerBean.newCustomer.lastName}" />
+					<p:outputLabel for="ncEmail" value="Email" />
+					<p:inputText id="ncEmail" value="#{customerBean.newCustomer.email}"
+						required="true" requiredMessage="Email missing" />
+					<p:outputLabel for="ncPhone" value="Phone" />
+					<p:inputText id="ncPhone" value="#{customerBean.newCustomer.phone}" />
+					<p:outputLabel for="ncBirthdate" value="Birthdate" />
+					<p:inputText id="ncBirthdate"
+						value="#{customerBean.newCustomer.birthDate}" />
+					<p:outputLabel for="ncUser" value="User" />
+					<p:inputText id="ncUser" value="#{customerBean.newCustomer.user}" />
+					<p:outputLabel for="ncPass" value="Pass" />
+					<p:inputText id="ncPass" value="#{customerBean.newCustomer.pass}" />
+					<p:outputLabel for="ncStatus" value="Status" rendered="false"/>
+					<p:selectOneMenu id="ncStatus" rendered="false"
+						value="#{customerBean.newCustomer.status.label}" required="true"
+						requiredMessage="Select a status">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{customerBean.statusList}" />
+					</p:selectOneMenu>
+						<f:facet name="footer">
+							<p:commandButton value="Save" update=":form:customers, :growl"
+								action="#{customerBean.createCustomer}"
+								oncomplete="PF('newCustomerDlg').hide()" />
+							<p:commandButton type="reset" value="Reset" />
+							<p:commandButton value="Close" immediate="true"
+								oncomplete="PF('newCustomerDlg').hide()" />
+						</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Customer" resizable="false" showEffect="fade" rendered="false"
+			widgetVar="detailCustomerDlg">
+			<h:form id="detailCustomerForm">
+				<h:panelGrid id="detailCustomer" columns="2" cellpadding="5">
+					<p:outputLabel for="dpPayer" value="Payer" />
+					<p:inputText id="dpPayer" value="#{paymentBean.payment.payer}"
+						required="true" requiredMessage="Payer missing" />
+
+					<p:outputLabel for="dpDate" value="Date" />
+					<p:calendar id="dpDate" value="#{paymentBean.payment.date}"
+						pattern="dd-MM-yyyy" required="true" requiredMessage="Pick a date"
+						converter="localDateConverter" />
+
+					<p:outputLabel for="dpAmount" value="Amount" />
+					<p:inputText id="dpAmount" value="#{paymentBean.payment.amount}"
+						required="true" requiredMessage="Amount missing" />
+
+					<p:outputLabel for="dpType" value="Type" />
+					<p:inputText id="dpType" value="#{paymentBean.payment.type}"
+						required="true" requiredMessage="Type missing" />
+					<f:facet name="footer">
+						<p:commandButton value="Save" update=":form:payments, :growl"
+							action="#{paymentBean.modifyCustomer}"
+							oncomplete="PF('detailCustomerDlg').hide()" />
+						<p:commandButton value="Close" immediate="true"
+							oncomplete="PF('detailCustomerDlg').hide()" />
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

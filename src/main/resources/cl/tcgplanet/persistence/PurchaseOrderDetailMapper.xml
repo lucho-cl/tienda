@@ -1,34 +1,129 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cl.tcgplanet.persistence.PurchaseOrderDetailMapper">
-    <cache />
 
-    <select id="getPurchaseOrderDetail" parameterType="PurchaseOrderDetail" resultType="PurchaseOrderDetail">
-        SELECT id, firstName, lastName, email FROM product
-        WHERE ID = #{id}
-    </select>
+	<resultMap type="PurchaseOrderDetail" id="poDetailResult">
+		<association property="po" column="po_id" javaType="PurchaseOrder"
+			select="getPurchaseOrder"></association>
+		<association property="product" column="product_sku"
+			javaType="Product" select="getProduct"></association>
+	</resultMap>
 
-    <select id="getAllPurchaseOrderDetails" resultType="PurchaseOrderDetail">
-        SELECT id, firstName, lastName, email FROM product
-    </select>
+	<resultMap type="PurchaseOrder" id="purchaseOrderResult">
+		<association property="status" column="po_status_id"
+			javaType="CodeName" select="getStatus"></association>
+		<association property="customer" column="customer_id"
+			javaType="Customer" select="getCustomer"></association>
+	</resultMap>
 
-    <insert id="insertPurchaseOrderDetail" parameterType="PurchaseOrderDetail">
-        INSERT INTO product (firstName, lastName, email)
-        VALUES (#{firstName}, #{lastName}, #{email})
-    </insert>
+	<select id="getPurchaseOrderDetail" parameterType="PurchaseOrderDetail"
+		resultMap="poDetailResult">
+		SELECT po_code,
+		product_sku,
+		quantity,
+		price
+		FROM po_detail
+		WHERE
+		po_id = #{po.id} AND product_sku = #{product.sku}
+	</select>
 
-    <update id="updatePurchaseOrderDetail" parameterType="PurchaseOrderDetail">
-        UPDATE product SET
-            firstName = #{firstName},
-            lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
-    </update>
-    
-    <delete id="deletePurchaseOrderDetail" parameterType="PurchaseOrderDetail">
-        UPDATE product SET
-            firstName = #{firstName},
-            lastName = #{lastName},
-            email = #{email}
-        WHERE ID = #{id}
-    </delete>
+	<select id="getAllPurchaseOrderDetails" resultMap="poDetailResult">
+		SELECT po_code,
+		product_sku,
+		quantity,
+		price
+		FROM po_detail
+	</select>
+
+	<select id="getPurchaseOrderDetails" parameterType="PurchaseOrderDetail"
+		resultMap="poDetailResult">
+		SELECT po_code,
+		product_sku,
+		quantity,
+		price
+		FROM po_detail
+		<where>
+			<if test="po != null and po.code != null">
+				po_code = #{po.code}
+			</if>
+			<if test="product != null and product.sku != null">
+				and product_sku = #{product.sku}
+			</if>
+			<if test="quantity != null">
+				and quantity = #{quantity}
+			</if>
+			<if test="price != null">
+				and price = #{price}
+			</if>
+		</where>
+	</select>
+
+	<select id="getPurchaseOrder" resultMap="purchaseOrderResult">
+		SELECT 
+		code,
+		close_date AS closeDate,
+		po_status_id,
+		customer_id,
+		city
+		FROM
+		purchace_order
+		WHERE code = #{po_code}
+	</select>
+
+	<select id="getProduct" resultType="Product">
+		SELECT sku,
+		name,
+		description,
+		mrp,
+		trade_price,
+		price,
+		status,
+		release_date,
+		range,
+		ss_code,
+		provider,
+		tag,
+		system,
+		race,
+		type,
+		barcode,
+		commodity_code,
+		country_origin,
+		weight,
+		cube,
+		order_weight,
+		order_cube
+		FROM
+		product
+		WHERE sku = #{product_sku}
+	</select>
+
+	<insert id="insertPurchaseOrderDetail" parameterType="PurchaseOrderDetail">
+		INSERT INTO
+		po_detail
+		(po_code,
+		product_sku,
+		quantity,
+		price)
+		VALUES
+		(#{po.code},
+		#{product.sku},
+		#{quantity},
+		#{price})
+	</insert>
+
+	<update id="updatePurchaseOrderDetail" parameterType="PurchaseOrderDetail">
+		UPDATE po_detail
+		<set>
+			<if test="quantity != null">quantity = #{quantity},</if>
+			<if test="price != null">price = #{price}</if>
+		</set>
+		WHERE po_code = #{po.code} AND product_sku = #{product.sku}
+
+	</update>
+
+	<delete id="deletePurchaseOrderDetail" parameterType="PurchaseOrderDetail">
+		DELETE FROM
+		po_detail
+		WHERE po_code = #{po.code} AND product_sku = #{product.sku}
+	</delete>
 </mapper>

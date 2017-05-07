@@ -7,25 +7,67 @@
 
 	<select id="getCustomer" parameterType="Customer" resultMap="customerResult">
 		SELECT id, name, last_name as lastName, email, phone, birth_date as
-		birthDate, user, pass, customer_status_id FROM customer
+		birthDate, user, pass, customer_status_id, registered FROM customer
 		WHERE id = #{id}
 	</select>
 
 	<select id="getAllCustomers" resultMap="customerResult">
+		SELECT id, name,
+		last_name as lastName, email, phone, birth_date as
+		birthDate, user,
+		pass, customer_status_id, registered FROM customer
+	</select>
+	<select id="getCustomers" parameterType="Customer" resultMap="customerResult">
+		<bind name="emailPattern" value="'%' + email + '%'" />
 		SELECT id, name, last_name as lastName, email, phone, birth_date as
-		birthDate, user, pass, customer_status_id FROM customer
+		birthDate, user, pass, customer_status_id, registered FROM customer
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null">
+				AND name = #{name}
+			</if>
+			<if test="lastName != null">
+				AND last_name = #{lastName}
+			</if>
+			<if test="email != null">
+				AND email LIKE #{emailPattern}
+			</if>
+			<if test="phone != null">
+				AND phone = #{phone}
+			</if>
+			<if test="birthDate != null">
+				AND birth_date = #{birthDate}
+			</if>
+			<if test="user != null">
+				AND user = #{user}
+			</if>
+			<if test="pass != null">
+				AND pass = #{pass}
+			</if>
+			<if test="status.label != null">
+				AND customer_status_id = #{status.label}
+			</if>
+		</where>
 	</select>
 
 	<select id="getStatus" resultType="CodeName">
-		SELECT id, name FROM customer_status
-		WHERE id = #{id}
+		SELECT id AS label, name AS
+		value FROM
+		customer_status
+		WHERE id = #{customer_status_id}
 	</select>
 
 	<insert id="insertCustomer" parameterType="Customer">
-		INSERT INTO customer (name, last_name, email, phone, birth_date, user, pass,
-		customer_status_id)
-		VALUES (#{name}, #{lastName}, #{email}, #{phone}, #{birthDate}, #{user},
-		#{pass}, #{status.code})
+		INSERT INTO customer
+		(name, last_name, email, phone, birth_date, user, pass,
+		customer_status_id, registered)
+		VALUES (#{name}, #{lastName}, #{email},
+		#{phone},
+		#{birthDate}, #{user},
+		#{pass}, #{status.label},
+		#{registered})
 	</insert>
 
 	<update id="updateCustomer" parameterType="Customer">
@@ -33,17 +75,18 @@
 		name = #{name},
 		lastName = #{lastName},
 		email = #{email},
-		phone = #{phone},
+		phone =
+		#{phone},
 		birth_date = #{birthDate},
 		user = #{user},
 		pass = #{pass},
-		customer_status_id = #{status.code}
+		customer_status_id = #{status.label}
 		WHERE id = #{id}
 	</update>
 
 	<delete id="deleteCustomer" parameterType="Customer">
 		UPDATE customer SET
-		customer_status_id = #{status.code}
+		customer_status_id = #{status.label}
 		WHERE id = #{id}
 	</delete>
 </mapper>

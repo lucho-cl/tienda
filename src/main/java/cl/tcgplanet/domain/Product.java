@@ -1,8 +1,12 @@
 package cl.tcgplanet.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public class Product {
+public class Product extends BaseModel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -646420339967767695L;
 	private String sku;
 	private String name;
 	private String description;
@@ -10,7 +14,7 @@ public class Product {
 	private Double price;
 	private Double tradePrice;
 	private Object status;
-	private Date releaseDate;
+	private LocalDate releaseDate;
 	private String range;
 	private String ssCode;
 	private Object provider;
@@ -67,10 +71,10 @@ public class Product {
 	public void setStatus(Object status) {
 		this.status = status;
 	}
-	public Date getReleaseDate() {
+	public LocalDate getReleaseDate() {
 		return releaseDate;
 	}
-	public void setReleaseDate(Date releaseDate) {
+	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 	public String getRange() {

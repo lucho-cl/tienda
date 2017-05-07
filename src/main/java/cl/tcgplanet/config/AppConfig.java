@@ -7,6 +7,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import cl.tcgplanet.service.HelloWorld;
@@ -38,6 +39,10 @@ public class AppConfig {
 		return dataSource;
 	}
 
+	@Bean
+	public DataSourceTransactionManager transactionManager() {
+		return new DataSourceTransactionManager(dataSource());
+	}
 //	@Bean
 //	public SqlSessionFactory sqlSessionFactory() throws Exception {
 //		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();

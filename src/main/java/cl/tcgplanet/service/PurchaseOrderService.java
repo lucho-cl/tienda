@@ -5,13 +5,17 @@ import java.util.List;
 import cl.tcgplanet.domain.PurchaseOrder;
 
 public interface PurchaseOrderService {
-    public PurchaseOrder getPurchaseOrder(PurchaseOrder purchaseOrder);
+    public PurchaseOrder getPurchaseOrder(PurchaseOrder po);
     
     public List<PurchaseOrder> getAllPurchaseOrders();
 
-    public void insertPurchaseOrder(PurchaseOrder purchaseOrder);
+    public List<PurchaseOrder> getPurchaseOrders(PurchaseOrder po);
 
-    public void updatePurchaseOrder(PurchaseOrder purchaseOrder);
+    public void insertPurchaseOrder(PurchaseOrder po);
+
+    public void updatePurchaseOrder(PurchaseOrder po);
     
-    public void deletePurchaseOrder(PurchaseOrder purchaseOrder);
+    public void deletePurchaseOrder(PurchaseOrder po);
+
+	public String getNextOrderCode(String string);
 }

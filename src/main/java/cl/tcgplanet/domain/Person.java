@@ -1,6 +1,6 @@
 package cl.tcgplanet.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Person extends BaseModel{
 	
@@ -13,10 +13,11 @@ public class Person extends BaseModel{
 	private String lastName;
 	private String email;
 	private String phone;
-	private Date birthDate;
+	private LocalDate birthDate;
 	private String user;
 	private String pass;
 	private CodeName status;
+	private LocalDate registered;
 	public Integer getId() {
 		return id;
 	}
@@ -47,10 +48,10 @@ public class Person extends BaseModel{
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getUser() {
@@ -72,6 +73,12 @@ public class Person extends BaseModel{
 	}
 	public void setStatus(CodeName status) {
 		this.status = status;
+	}
+	public LocalDate getRegistered() {
+		return registered;
+	}
+	public void setRegistered(LocalDate registered) {
+		this.registered = registered;
 	}
 
 }

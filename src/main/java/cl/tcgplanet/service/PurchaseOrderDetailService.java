@@ -8,6 +8,8 @@ public interface PurchaseOrderDetailService {
     public PurchaseOrderDetail getPurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail);
     
     public List<PurchaseOrderDetail> getAllPurchaseOrderDetails();
+    
+    public List<PurchaseOrderDetail> getPurchaseOrderDetails(PurchaseOrderDetail purchaseOrderDetail);
 
     public void insertPurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail);
 
