@@ -17,6 +17,7 @@
 		<junit.version>3.8.1</junit.version>
 		<jdk.version>1.8</jdk.version>
 		<jsf.version>2.2.14</jsf.version>
+		<poi.version>3.16</poi.version>
 
 	</properties>
 	<dependencies>
@@ -117,6 +118,14 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>TcgPlanet</finalName>
